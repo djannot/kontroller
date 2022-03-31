@@ -1,0 +1,147 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="css/jsoneditor.min.css" rel="stylesheet" type="text/css">
+  <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="css/tabulator.min.css" rel="stylesheet">
+  <link href="css/tabulator_semanticui.min.css" rel="stylesheet">
+  <style type="text/css">
+    html,body{
+      height: 100%;
+      padding: 1em;
+    }
+
+    #editor {
+      width: 100%;
+      height: 100%;
+      font-size: 20px;
+    }
+
+    .top-right-corner img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .modal-fs {
+      padding: 0 !important; // override inline padding-right added from js
+    }
+    .modal-fs .modal-dialog {
+      width: 100%;
+      max-width: none;
+      height: 100%;
+      margin: 0;
+    }
+    .modal-fs .modal-content {
+      height: 100%;
+      border: 0;
+      border-radius: 0;
+    }
+    .modal-fs .modal-body {
+      overflow-y: auto;
+    }
+    #navbar > ul {
+      display: table-row;
+    }
+    
+    #navbar > ul > li {
+      display: table-cell;
+      float: none;
+      vertical-align: middle;
+    }
+  </style>
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/js-yaml.min.js"></script>
+  <script src="/js/src/ace.js"></script>
+  <script src="/js/jsoneditor.min.js"></script>
+  <script src="/js/luxon.min.js"></script>
+  <script src="/js/tabulator.min.js"></script>
+  <script src="/js/clipboard.min.js"></script>
+  <script src="/js/app.js?0.1.6"></script>
+</head>
+<body>
+  <div class="modal modal-fs fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fs" role="document">
+      <div class="modal-content modal-fs">
+        <div class="modal-header">
+          <h5 class="modal-title" id="largeModalLabel"></h5>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body modal-fs m-3" id="largeModalBody">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid h-100">
+    <div class="row justify-content-center h-100">
+      <div class="col-12">
+        <div class="h-100 d-flex flex-column">
+          <div class="row">
+            <div class="col-md-12">
+              <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                  <a class="navbar-brand" href="#">Kontroller</a>
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                </div>
+              </nav>
+            </div>
+          </div>
+          <div class="row mt-3 flex-grow-1 shadow-lg p-3 rounded">
+            <div class="col-md-8 d-flex flex-column p-3 shadow-sm rounded">
+              <div class="top-right-corner mb-3 text-end" onclick="fullscreen(this)">
+                <img src="img/fullscreen.png">
+              </div>
+              <div>
+                <select id="filter-field">
+                  <option></option>
+                  <option value="type">Type</option>
+                  <option value="apiObj.apiVersion">ApiVersion</option>
+                  <option value="apiObj.kind">Kind</option>
+                  <option value="apiObj.metadata.namespace">Namespace</option>
+                  <option value="apiObj.metadata.name">Name</option>
+                </select>
+              
+                <select id="filter-type">
+                  <option value="=">=</option>
+                  <option value="<"><</option>
+                  <option value="<="><=</option>
+                  <option value=">">></option>
+                  <option value=">=">>=</option>
+                  <option value="!=">!=</option>
+                  <option value="like">like</option>
+                </select>
+              
+                <input id="filter-value" type="text" placeholder="value to filter">
+              
+                <button id="filter-clear">Clear Filter</button>
+              </div>
+              <div id="table"></div>
+            </div>
+            <div class="col-md-4 d-flex flex-column p-3 shadow-sm rounded">
+              <div class="top-right-corner mb-3 text-end" onclick="fullscreen(this)">
+                <img src="img/fullscreen.png">
+              </div>
+              <div class="h-100">
+                <pre class="h-100" id="editor"></pre>
+              </div>
+              <!--
+              <div class="h-100">
+                <pre class="h-100" id="json"></pre>
+              </div>
+              -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

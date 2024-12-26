@@ -100,28 +100,50 @@
                 <img src="img/fullscreen.png">
               </div>
               <div>
-                <select id="filter-field">
-                  <option></option>
-                  <option value="type">Type</option>
-                  <option value="apiObj.apiVersion">ApiVersion</option>
-                  <option value="apiObj.kind">Kind</option>
-                  <option value="apiObj.metadata.namespace">Namespace</option>
-                  <option value="apiObj.metadata.name">Name</option>
-                </select>
-              
-                <select id="filter-type">
-                  <option value="=">=</option>
-                  <option value="<"><</option>
-                  <option value="<="><=</option>
-                  <option value=">">></option>
-                  <option value=">=">>=</option>
-                  <option value="!=">!=</option>
-                  <option value="like">like</option>
-                </select>
-              
-                <input id="filter-value" type="text" placeholder="value to filter">
-              
-                <button id="filter-clear">Clear Filter</button>
+                <div class="row g-3 mb-3">
+                  <div class="col-auto">
+                    <label for="apiVersion" class="col-form-label">API Version:</label>
+                  </div>
+                  <div class="col-auto">
+                    <input id="apiVersion" type="text" placeholder="v1 (empty for all)" class="form-control">
+                  </div>
+                  <div class="col-auto">
+                    <button id="applyApiVersion" class="btn btn-primary">Apply</button>
+                  </div>
+                </div>
+
+                <div class="row g-3">
+                  <div class="col-auto">
+                    <label for="filter-field" class="col-form-label">Filter:</label>
+                  </div>
+                  <div class="col-auto">
+                    <select id="filter-field" class="form-control">
+                      <option></option>
+                      <option value="type">Type</option>
+                      <option value="apiObj.apiVersion">ApiVersion</option>
+                      <option value="apiObj.kind">Kind</option>
+                      <option value="apiObj.metadata.namespace">Namespace</option>
+                      <option value="apiObj.metadata.name">Name</option>
+                    </select>
+                  </div>
+                  <div class="col-auto">
+                    <select id="filter-type" class="form-control">
+                      <option value="=">=</option>
+                      <option value="<"><</option>
+                      <option value="<="><=</option>
+                      <option value=">">></option>
+                      <option value=">=">>=</option>
+                      <option value="!=">!=</option>
+                      <option value="like">like</option>
+                    </select>
+                  </div>
+                  <div class="col-auto">
+                    <input id="filter-value" type="text" placeholder="value to filter" class="form-control">
+                  </div>
+                  <div class="col-auto">
+                    <button id="filter-clear" class="btn btn-secondary">Clear filter</button>
+                  </div>
+                </div>
               </div>
               <div id="table"></div>
             </div>

@@ -94,16 +94,28 @@ $('document').ready(function(){
 
     const inputElement = document.getElementById("inputElement");
 
+    // Define variables for input elements
+    const apiVersionEl = document.getElementById('apiVersion');
+    const applyApiVersionBtn = document.getElementById('applyApiVersion');
     const socket = new WebSocket('ws://' + window.location.host);
+
+    let currentApiVersion = 'v1'; // Default API version
 
     // Connection opened
     socket.addEventListener('open', function (event) {
-        socket.send('Hello Server!');
+        socket.send(JSON.stringify({ apiVersion: currentApiVersion }));
+    });
+
+    // Handle apply button click to update the API version
+    applyApiVersionBtn.addEventListener('click', function() {
+        currentApiVersion = apiVersionEl.value;
+        console.log(`API Version set to: ${currentApiVersion}`);
+        socket.send(JSON.stringify({ apiVersion: currentApiVersion }));
     });
 
     let rows = 20;
     let data = [];
-    for(i=0; i<rows; i++) {
+    for (let i = 0; i < rows; i++) {
         data.push({});
     }
 
@@ -119,10 +131,9 @@ $('document').ready(function(){
             {title:"Kind", field:"apiObj.kind", formatter:"plaintext", headerFilter:"input"},
             {title:"Namespace", field:"apiObj.metadata.namespace", formatter:"plaintext", headerFilter:"input"},
             {title:"Name", field:"apiObj.metadata.name", formatter:"plaintext", headerFilter:"input"},
-            //{title:"Object", field:"formattedObject", formatter:"html", headerFilter:"input"},
         ]
-    })
-    
+    });
+
     table.on("tableBuilt", function(){
         table.setSort([
             {column:"ts", dir:"desc"},
@@ -130,31 +141,21 @@ $('document').ready(function(){
     });
 
     table.on("rowClick", function(e, row){
-        //e - the click event object
-        //row - row component
-        //console.log(row);
-        tmp = row;
-        //editor.set(row.getData().apiObj);
-        //editor.setValue(row.getData().apiObj);
         editor.setValue(jsyaml.dump(row.getData().apiObj));
         editor.selection.clearSelection();
-        //editor.resize();
     });
-
-    // Listen for messages
 
     start = Date.now();
 
+    // Listen for WebSocket messages
     socket.addEventListener('message', function (event) {
-        //console.log(JSON.parse(event.data));
-        let data = JSON.parse(event.data);
-        if(new Date(data.ts) - start > 1000) {
+        const data = JSON.parse(event.data);
+        if (new Date(data.ts) - start > 1000) {
             data.ts = luxon.DateTime.fromMillis(data.ts).toFormat('yyyy-MM-dd HH:mm:ss');
             data.formattedObject = "<pre>" + format_json(data.apiObj) + "</pre>";
             table.addData([data]);
         }
     });
-
 
     // Move back the component from the full screen
     var largeModal = document.getElementById('largeModal');

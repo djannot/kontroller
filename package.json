@@ -2,6 +2,7 @@
   "dependencies": {
     "@kubernetes/client-node": "^0.16.1",
     "express": "^4.17.3",
-    "ws": "^8.5.0"
+    "ws": "^8.5.0",
+    "yargs": "^17.7.2"
   }
 }
